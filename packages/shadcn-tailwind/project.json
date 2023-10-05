@@ -1,0 +1,44 @@
+{
+  "name": "shadcn-tailwind",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shadcn-tailwind/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shadcn-tailwind",
+        "main": "packages/shadcn-tailwind/src/index.ts",
+        "tsConfig": "packages/shadcn-tailwind/tsconfig.lib.json",
+        "assets": [],
+        "project": "packages/shadcn-tailwind/package.json",
+        "compiler": "swc",
+        "format": ["cjs", "esm"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs shadcn-tailwind {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/shadcn-tailwind/**/*.ts",
+          "packages/shadcn-tailwind/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/shadcn-tailwind"
+      }
+    }
+  },
+  "tags": []
+}
