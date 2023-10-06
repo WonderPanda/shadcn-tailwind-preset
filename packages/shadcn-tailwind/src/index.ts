@@ -1,1 +1,1 @@
-export * from './lib/shadcn-tailwind';
+export * from './lib/preset';
