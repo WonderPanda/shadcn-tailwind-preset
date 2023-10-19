@@ -10,6 +10,8 @@ export const makePreset = (config: PresetConfig): Config => {
     plugins: [animatePlugin, makePlugin(config)],
     safelist: [
       'dark',
+      'brand-alpha',
+      'gray-alpha',
       config.primaryBrandColor,
       `${config.primaryBrandColor}_dark`,
       ...(config.additionalColors ?? []).flatMap((c) => [c, `${c}_dark`]),

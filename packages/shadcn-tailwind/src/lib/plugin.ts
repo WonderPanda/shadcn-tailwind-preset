@@ -4,18 +4,18 @@ import { convertRadixColorToShadTheme } from './radix-colors';
 
 const makeColorScale = (name: string) => {
   return {
-    1: `hsl(var(--${name}-1))`,
-    2: `hsl(var(--${name}-2))`,
-    3: `hsl(var(--${name}-3))`,
-    4: `hsl(var(--${name}-4))`,
-    5: `hsl(var(--${name}-5))`,
-    6: `hsl(var(--${name}-6))`,
-    7: `hsl(var(--${name}-7))`,
-    8: `hsl(var(--${name}-8))`,
-    9: `hsl(var(--${name}-9))`,
-    10: `hsl(var(--${name}-10))`,
-    11: `hsl(var(--${name}-11))`,
-    12: `hsl(var(--${name}-12))`,
+    1: `var(--${name}-1)`,
+    2: `var(--${name}-2)`,
+    3: `var(--${name}-3)`,
+    4: `var(--${name}-4)`,
+    5: `var(--${name}-5)`,
+    6: `var(--${name}-6)`,
+    7: `var(--${name}-7)`,
+    8: `var(--${name}-8)`,
+    9: `var(--${name}-9)`,
+    10: `var(--${name}-10)`,
+    11: `var(--${name}-11)`,
+    12: `var(--${name}-12)`,
   };
 };
 
@@ -73,8 +73,14 @@ export const makePlugin = (config: PresetConfig) =>
             brand: {
               ...makeColorScale('brand'),
             },
+            ['brand-alpha']: {
+              ...makeColorScale('brand-alpha'),
+            },
             gray: {
               ...makeColorScale('gray'),
+            },
+            ['gray-alpha']: {
+              ...makeColorScale('gray-alpha'),
             },
             destructive: {
               DEFAULT: 'hsl(var(--destructive))',

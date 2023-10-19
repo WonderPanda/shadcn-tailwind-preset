@@ -1,4 +1,3 @@
-const regexPattern = /hsl\(|\)|,/g;
 import * as radixColors from '@radix-ui/colors';
 
 export type BrandColorName =
@@ -26,6 +25,8 @@ export type BrandColorName =
   | 'orange'
   | 'brown';
 
+type BrandColorWithAlphaName = `${BrandColorName}A`;
+
 export type GrayName = 'gray' | 'mauve' | 'slate' | 'sage' | 'olive' | 'sand';
 
 type DarkColorName<Scale extends string> = `${Scale}Dark`;
@@ -35,8 +36,6 @@ type ScaleNumbers = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 type ColorScale<T extends string> = {
   [K in `${T}${ScaleNumbers}`]: string;
 };
-
-const convertHslToCssVar = (hsl: string) => hsl.replace(regexPattern, '');
 
 const getGrayNameForBrand = (brandColor: BrandColorName): GrayName => {
   const mauveColors = [
@@ -82,8 +81,7 @@ function makeColorFactory<T extends string>(
   colorName: T,
   colorScale: ColorScale<T>
 ) {
-  return (number: ScaleNumbers) =>
-    convertHslToCssVar(colorScale[`${colorName}${number}`]);
+  return (number: ScaleNumbers) => colorScale[`${colorName}${number}`];
 }
 
 type Options = {
@@ -106,22 +104,53 @@ export const convertRadixColorToShadTheme = (
     typeof grayName
   >;
   const darkGrayScale = radixColors[darkGrayName] as unknown as ColorScale<
-    typeof grayName
+    typeof darkGrayName
   >;
+
+  const grayAlphaScale = radixColors[
+    `${grayName}A`
+  ] as unknown as ColorScale<`${typeof grayName}A`>;
+  const darkGrayAlphaScale = radixColors[
+    `${darkGrayName}A`
+  ] as unknown as ColorScale<`${typeof grayName}A`>;
+
+  radixColors.slateDarkA;
 
   const brandColorScale = radixColors[
     brandColor
   ] as unknown as ColorScale<BrandColorName>;
 
+  const brandAlphaColorScale = radixColors[
+    `${brandColor}A`
+  ] as unknown as ColorScale<BrandColorWithAlphaName>;
+
   const darkBrandColorScale = radixColors[
     getDarkColorName(brandColor)
   ] as unknown as ColorScale<BrandColorName>;
 
+  const darkBrandAlphaColorScale = radixColors[
+    `${brandColor}DarkA`
+  ] as unknown as ColorScale<BrandColorWithAlphaName>;
+
   const makeGrayColor = makeColorFactory(grayName, grayScale);
-  const makeDarkGrayColor = makeColorFactory(grayName, darkGrayScale);
+  const makeDarkGrayColor = makeColorFactory(darkGrayName, darkGrayScale);
+
+  const makeGrayAlphaColor = makeColorFactory(`${grayName}A`, grayAlphaScale);
+  const makeDarkGrayAlphaColor = makeColorFactory(
+    `${grayName}A`,
+    darkGrayAlphaScale
+  );
 
   const makeBrandColor = makeColorFactory(brandColor, brandColorScale);
+  const makeBrandAlphaColor = makeColorFactory(
+    `${brandColor}A`,
+    brandAlphaColorScale
+  );
   const makeDarkBrandColor = makeColorFactory(brandColor, darkBrandColorScale);
+  const makeDarkBrandAlphaColor = makeColorFactory(
+    `${brandColor}A`,
+    darkBrandAlphaColorScale
+  );
 
   const makeScaleVariables = (
     name: string,
@@ -136,6 +165,16 @@ export const convertRadixColorToShadTheme = (
 
     return Object.fromEntries(seed) as Record<string, string>;
   };
+
+  const grayAlphaColorVariables = makeScaleVariables(
+    'gray-alpha',
+    makeGrayAlphaColor
+  );
+
+  const darkGrayAlphaColorVariables = makeScaleVariables(
+    'gray-alpha',
+    makeDarkGrayAlphaColor
+  );
 
   return {
     [lightClassName]: {
@@ -160,7 +199,9 @@ export const convertRadixColorToShadTheme = (
       '--ring': makeBrandColor(8),
       '--radius': '0.5rem',
       '--brand-1': makeBrandColor(1),
+      ...grayAlphaColorVariables,
       ...makeScaleVariables('brand', makeBrandColor),
+      ...makeScaleVariables('brand-alpha', makeBrandAlphaColor),
       ...makeScaleVariables('gray', makeGrayColor),
     },
     [darkClassName]: {
@@ -184,7 +225,9 @@ export const convertRadixColorToShadTheme = (
       '--input': '220 13% 91%',
       '--ring': makeDarkBrandColor(8),
       '--radius': '0.5rem',
+      ...darkGrayAlphaColorVariables,
       ...makeScaleVariables('brand', makeDarkBrandColor),
+      ...makeScaleVariables('brand-alpha', makeDarkBrandAlphaColor),
       ...makeScaleVariables('gray', makeDarkGrayColor),
     },
   };
