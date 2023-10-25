@@ -91,6 +91,54 @@ type Options = {
   darkClassName?: string;
 };
 
+export const radixSemanticScaleColor: Record<
+  string,
+  { brand?: ScaleNumbers; gray?: ScaleNumbers }
+> = {
+  'app-bg': {
+    brand: 1,
+  },
+  'subtle-bg': {
+    brand: 2,
+  },
+  'ui-bg': {
+    brand: 3,
+  },
+  'ui-bg-hovered': {
+    brand: 4,
+  },
+  'ui-bg-active': {
+    brand: 5,
+  },
+  'subtle-border': {
+    brand: 6,
+  },
+  'ui-border': {
+    brand: 7,
+  },
+  'ui-border-hovered': {
+    brand: 8,
+  },
+  'solid-bg': {
+    brand: 9,
+  },
+  'solid-bg-hovered': {
+    brand: 10,
+  },
+  foreground: {
+    brand: 11,
+  },
+  'foreground-high-contrast': {
+    brand: 12,
+  },
+  'solid-contrast': {
+    gray: 2,
+  },
+  'solid-high-contrast': {
+    gray: 1,
+  },
+};
+
 export const convertRadixColorToShadTheme = (
   brandColor: BrandColorName,
   options?: Options
@@ -137,10 +185,25 @@ export const convertRadixColorToShadTheme = (
     return Object.fromEntries(seed) as Record<string, string>;
   };
 
+  const makeSemanticScaleVariables = (
+    colorFactory: (scaleNumber: ScaleNumbers) => string,
+    grayFactory: (scaleNumber: ScaleNumbers) => string,
+    name?: string
+  ) => {
+    const colorScaleEntries = Object.entries(radixSemanticScaleColor).map(
+      ([semanticName, semanticScale]) => {
+        const { brand, gray } = semanticScale;
+        const color = brand ? colorFactory(brand) : grayFactory(gray || 1);
+        return [`--${semanticName}${name ? `-${name}` : ''}`, color];
+      }
+    );
+
+    return Object.fromEntries(colorScaleEntries) as Record<string, string>;
+  };
+
   return {
     [lightClassName]: {
       '--background': makeGrayColor(1),
-      '--foreground': makeBrandColor(11),
       '--card': makeGrayColor(2),
       '--card-foreground': makeGrayColor(11),
       '--popover': '0 0% 100%',
@@ -162,10 +225,11 @@ export const convertRadixColorToShadTheme = (
       '--brand-1': makeBrandColor(1),
       ...makeScaleVariables('brand', makeBrandColor),
       ...makeScaleVariables('gray', makeGrayColor),
+      ...makeSemanticScaleVariables(makeBrandColor, makeGrayColor),
+      ...makeSemanticScaleVariables(makeGrayColor, makeGrayColor, 'gray'),
     },
     [darkClassName]: {
       '--background': makeDarkGrayColor(1),
-      '--foreground': makeDarkBrandColor(11),
       '--card': makeDarkGrayColor(2),
       '--card-foreground': makeDarkGrayColor(11),
       '--popover': '0 0% 100%',
@@ -186,6 +250,8 @@ export const convertRadixColorToShadTheme = (
       '--radius': '0.5rem',
       ...makeScaleVariables('brand', makeDarkBrandColor),
       ...makeScaleVariables('gray', makeDarkGrayColor),
+      ...makeSemanticScaleVariables(makeDarkBrandColor, makeGrayColor),
+      ...makeSemanticScaleVariables(makeGrayColor, makeGrayColor, 'gray'),
     },
   };
 };
