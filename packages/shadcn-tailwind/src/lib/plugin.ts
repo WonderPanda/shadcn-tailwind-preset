@@ -1,6 +1,9 @@
 import plugin from 'tailwindcss/plugin';
 import { PresetConfig } from './types';
-import { convertRadixColorToShadTheme } from './radix-colors';
+import {
+  convertRadixColorToShadTheme,
+  radixSemanticScaleColor,
+} from './radix-colors';
 
 const makeColorScale = (name: string) => {
   return {
@@ -19,6 +22,15 @@ const makeColorScale = (name: string) => {
   };
 };
 
+const makeSemanticScale = (name?: string) => {
+  const variables = Object.keys(radixSemanticScaleColor).map((k) => {
+    const namePostfix = name ? `-${name}` : '';
+    return [`${k}${namePostfix}`, `hsl(var(--${k}${namePostfix}))`];
+  });
+
+  return Object.fromEntries(variables);
+};
+
 export const makePlugin = (config: PresetConfig) =>
   plugin(
     ({ addBase }) => {
@@ -31,7 +43,10 @@ export const makePlugin = (config: PresetConfig) =>
 
       (config.additionalColors ?? []).forEach((c) =>
         addBase({
-          ...convertRadixColorToShadTheme(c),
+          ...convertRadixColorToShadTheme(c, {
+            lightClassName: `.${c}`,
+            darkClassName: `.dark .${c}`,
+          }),
         })
       );
 
@@ -61,7 +76,6 @@ export const makePlugin = (config: PresetConfig) =>
             input: 'hsl(var(--input))',
             ring: 'hsl(var(--ring))',
             background: 'hsl(var(--background))',
-            foreground: 'hsl(var(--foreground))',
             primary: {
               DEFAULT: 'hsl(var(--primary))',
               foreground: 'hsl(var(--primary-foreground))',
@@ -73,6 +87,8 @@ export const makePlugin = (config: PresetConfig) =>
             brand: {
               ...makeColorScale('brand'),
             },
+            ...makeSemanticScale(),
+            ...makeSemanticScale('gray'),
             gray: {
               ...makeColorScale('gray'),
             },
