@@ -126,10 +126,10 @@ export const radixSemanticScaleColor: Record<
     brand: 10,
   },
   foreground: {
-    brand: 11,
+    gray: 11,
   },
   'foreground-high-contrast': {
-    brand: 12,
+    gray: 12,
   },
   'solid-contrast': {
     gray: 2,
@@ -209,7 +209,7 @@ export const convertRadixColorToShadTheme = (
       '--popover': '0 0% 100%',
       '--popover-foreground': '224 71.4% 4.1%',
       '--primary': makeBrandColor(9),
-      '--primary-foreground': makeBrandColor(12),
+      '--primary-foreground': makeGrayColor(11),
       '--secondary': '220 14.3% 95.9%',
       '--secondary-foreground': '220.9 39.3% 11%',
       '--muted': makeGrayColor(3),
@@ -235,7 +235,7 @@ export const convertRadixColorToShadTheme = (
       '--popover': '0 0% 100%',
       '--popover-foreground': '224 71.4% 4.1%',
       '--primary': makeDarkBrandColor(9),
-      '--primary-foreground': makeDarkBrandColor(12),
+      '--primary-foreground': makeDarkGrayColor(11),
       '--secondary': '220 14.3% 95.9%',
       '--secondary-foreground': '220.9 39.3% 11%',
       '--muted': makeDarkGrayColor(3),
@@ -255,3 +255,73 @@ export const convertRadixColorToShadTheme = (
     },
   };
 };
+
+// SHADCN THEMING REFERENCE BELOW
+
+// hsl(0 0% 100%) --background
+// hsl(20 14.3% 4.1%) --foreground
+// hsl(0 0% 100%) -- card (same as background)
+// hsl(20 14.3% 4.1%) -- card-foreground (same as foreground)
+// hsl(0 0% 100%) -- popover (same as background)
+// hsl(0 0% 100%) -- popover (same as background)
+// hsl(20 14.3% 4.1%) -- popover-foreground (same as foreground)
+// hsl(24.6 95% 53.1%) -- primary
+// hsl(60 9.1% 97.8%) -- primary-foreground
+// hsl(60 4.8% 95.9%) -- secondary
+// hsl(24 9.8% 10%) -- secondary-foreground
+// hsl(60 4.8% 95.9%) -- muted
+// hsl(25 5.3% 44.7%) -- muted-foreground
+// hsl(60 4.8% 95.9%) -- accent
+// hsl(24 9.8% 10%) -- accent-foreground
+// hsl(0 84.2% 60.2%) -- destructive
+// hsl(60 9.1% 97.8%) -- destructive-foreground
+// hsl(20 5.9% 90%) -- border
+// hsl(20 5.9% 90%) -- input
+// hsl(24.6 95% 53.1%) -- ring
+
+// @layer base {
+//   :root {
+//     --background: 0 0% 100%;
+//     --foreground: 20 14.3% 4.1%;
+//     --card: 0 0% 100%;
+//     --card-foreground: 20 14.3% 4.1%;
+//     --popover: 0 0% 100%;
+//     --popover-foreground: 20 14.3% 4.1%;
+//     --primary: 24.6 95% 53.1%;
+//     --primary-foreground: 60 9.1% 97.8%;
+//     --secondary: 60 4.8% 95.9%;
+//     --secondary-foreground: 24 9.8% 10%;
+//     --muted: 60 4.8% 95.9%;
+//     --muted-foreground: 25 5.3% 44.7%;
+//     --accent: 60 4.8% 95.9%;
+//     --accent-foreground: 24 9.8% 10%;
+//     --destructive: 0 84.2% 60.2%;
+//     --destructive-foreground: 60 9.1% 97.8%;
+//     --border: 20 5.9% 90%;
+//     --input: 20 5.9% 90%;
+//     --ring: 24.6 95% 53.1%;
+//     --radius: 0.5rem;
+//   }
+
+//   .dark {
+//     --background: 20 14.3% 4.1%;
+//     --foreground: 60 9.1% 97.8%;
+//     --card: 20 14.3% 4.1%;
+//     --card-foreground: 60 9.1% 97.8%;
+//     --popover: 20 14.3% 4.1%;
+//     --popover-foreground: 60 9.1% 97.8%;
+//     --primary: 20.5 90.2% 48.2%;
+//     --primary-foreground: 60 9.1% 97.8%;
+//     --secondary: 12 6.5% 15.1%;
+//     --secondary-foreground: 60 9.1% 97.8%;
+//     --muted: 12 6.5% 15.1%;
+//     --muted-foreground: 24 5.4% 63.9%;
+//     --accent: 12 6.5% 15.1%;
+//     --accent-foreground: 60 9.1% 97.8%;
+//     --destructive: 0 72.2% 50.6%;
+//     --destructive-foreground: 60 9.1% 97.8%;
+//     --border: 12 6.5% 15.1%;
+//     --input: 12 6.5% 15.1%;
+//     --ring: 20.5 90.2% 48.2%;
+//   }
+// }
